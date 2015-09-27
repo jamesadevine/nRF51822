@@ -49,7 +49,12 @@ public:
         return nRF5xGattServer::getInstance();
     };
     virtual GattClient &getGattClient() {
+#if defined(YOTTA_CFG_MICROBIT_S130) && (YOTTA_CFG_MICROBIT_S130 == 1)
+        return nRF5xGattClient::getInstance();
+#else
+        /* S110 doesn't require GattClient to be implemented; save 300 bytes by removing this static overhead. */
         return GattClient::getInstance();
+#endif
     }
     virtual const SecurityManager &getSecurityManager() const {
         return nRF5xSecurityManager::getInstance();
